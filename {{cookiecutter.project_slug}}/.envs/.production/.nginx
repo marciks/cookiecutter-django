@@ -1,7 +1,7 @@
 TZ=America/Chicago
 LETSENCRYPT=true
-LE_EMAIL=name@example.com
-LE_FQDN=www.example.com
+LE_EMAIL={{ cookiecutter.email }}
+LE_FQDN={{ cookiecutter.domain_name }},www.{{ cookiecutter.domain_name }}
 
 # - Manual certs location
 #- SSL_CERT=le-crt.pem
