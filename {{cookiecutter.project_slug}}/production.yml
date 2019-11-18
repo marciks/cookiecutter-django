@@ -3,7 +3,7 @@ version: '3'
 volumes:
   production_postgres_data: {}
   production_postgres_data_backups: {}
-  production_traefik: {}
+  production_nginx: {}
 
 services:
   django:{% if cookiecutter.use_celery == 'y' %} &django{% endif %}
@@ -30,18 +30,27 @@ services:
     env_file:
       - ./.envs/.production/.postgres
 
-  traefik:
-    build:
-      context: .
-      dockerfile: ./compose/production/traefik/Dockerfile
-    image: {{ cookiecutter.project_slug }}_production_traefik
-    depends_on:
-      - django
-    volumes:
-      - production_traefik:/etc/traefik/acme
-    ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
+    nginx:
+      build:
+        context: .
+        dockerfile: ./compose/production/nginx/Dockerfile
+      image: {{ cookiecutter.project_slug }}_production_nginx
+      hostname: nginx
+      restart: always
+      logging:
+        driver: json-file
+        options:
+          max-size: "10m"
+          max-file: "5"
+      volumes:
+        - production_nginx: /etc/nginx
+      depends_on:
+        - django
+      ports:
+        - "80:80"
+        - "443:443"
+      env_file:
+        - ./.envs/.production/.nginx
 
   redis:
     image: redis:5.0
