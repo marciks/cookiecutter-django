@@ -1,4 +1,4 @@
-##basic build dependencies of various Django apps for Debian Jessie 9.x
+##basic build dependencies of various Django apps for Debian Jessie 10.x
 #build-essential metapackage install: make, gcc, g++,
 build-essential
 #required to translate
@@ -20,4 +20,4 @@ liblcms2-dev
 libwebp-dev
 
 ##django-extensions
-graphviz-dev
+libgraphviz-dev
